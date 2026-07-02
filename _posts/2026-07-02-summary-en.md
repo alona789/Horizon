@@ -5,204 +5,225 @@ date: 2026-07-02
 lang: en
 ---
 
-> From 31 items, 9 important content pieces were selected
+> From 38 items, 10 important content pieces were selected
 
 ---
 
-1. [F-Droid Slams Google Verification as Malware Masquerade](#item-1) ⭐️ 8.0/10
-2. [Japan's top court rules AI cannot be listed as inventor](#item-2) ⭐️ 8.0/10
-3. [AI Proof Assistants Challenge Traditional Theorem Economy](#item-3) ⭐️ 8.0/10
-4. [ZCode Desktop App Harness for GLM-5.2 Released](#item-4) ⭐️ 8.0/10
-5. [HNN via Differential Geometry and Noether's Theorem](#item-5) ⭐️ 8.0/10
-6. [Cloudflare to block mixed-purpose AI crawlers starting September](#item-6) ⭐️ 8.0/10
-7. [OpenAI Proposes US Government Take 5% Stake in AI Giants](#item-7) ⭐️ 8.0/10
-8. [CSRC Approves Unitree Technology's IPO on STAR Market](#item-8) ⭐️ 8.0/10
-9. [Companies restrict AI use as costs soar: Citibank bans GPT-5.5](#item-9) ⭐️ 8.0/10
+1. [Linux 6.9 bug: LUKS suspend fails to wipe encryption keys from memory](#item-1) ⭐️ 8.0/10
+2. [Podman v6.0.0 Released with Major Improvements](#item-2) ⭐️ 8.0/10
+3. [F-Droid Calls Android Developer Verification a Malware Threat](#item-3) ⭐️ 8.0/10
+4. [Japan top court: AI cannot be listed as inventor on patents](#item-4) ⭐️ 8.0/10
+5. [ECTC 2026 Highlights: EMIB-T, Custom HBM, and Cooling](#item-5) ⭐️ 8.0/10
+6. [Hamiltonian Neural Networks through a Differential Geometry Lens](#item-6) ⭐️ 8.0/10
+7. [Cloudflare to block mixed-purpose AI crawlers from September](#item-7) ⭐️ 8.0/10
+8. [OpenAI Proposes US Government 5% Stake, Eyes Other AI Giants](#item-8) ⭐️ 8.0/10
+9. [Citibank blocks GPT-5.5 as AI costs surge, firms limit usage](#item-9) ⭐️ 8.0/10
+10. [Anthropic in talks with Samsung for custom AI chips](#item-10) ⭐️ 8.0/10
 
 ---
 
 <a id="item-1"></a>
-## [F-Droid Slams Google Verification as Malware Masquerade](https://f-droid.org/2026/07/01/adv-malware.html) ⭐️ 8.0/10
+## [Linux 6.9 bug: LUKS suspend fails to wipe encryption keys from memory](https://mathstodon.xyz/@iblech/116769502749142438) ⭐️ 8.0/10
 
-F-Droid published an article on July 1, 2026, harshly criticizing Google's new Android Developer Verification program, calling it a 'Trojan horse' that masquerades as protection but threatens user freedom and open-source app distribution. This critique underscores a growing conflict between Google's efforts to combat malware and the principles of openness and user control that have long defined Android. It raises important questions about the future of sideloading and alternative app stores, potentially affecting millions of Android users who rely on F-Droid and other third-party sources. The Android Developer Verification program requires developers to verify their identity and imposes a one-day waiting period with biometric authentication before installing apps from unverified developers. F-Droid argues that this creates a 'malware vendor' dynamic where Google controls what users can install, undermining the open nature of Android.
+A bug in Linux kernel 6.9 prevents the `cryptsetup luksSuspend` command from wiping disk-encryption master keys from kernel memory during system suspend, leaving them exposed. This security regression compromises disk encryption protection during sleep, making encrypted data vulnerable to cold boot attacks or memory forensics. The bug specifically affects the `cryptsetup luksSuspend` operation, which is a Debian-specific extension not officially part of the LUKS standard; however, it impacts all systems using this feature.
 
-hackernews · drewfax · Jul 2, 03:00 · [Discussion](https://news.ycombinator.com/item?id=48755965)
+hackernews · IngoBlechschmid · Jul 2, 15:25 · [Discussion](https://news.ycombinator.com/item?id=48763035)
 
-**Background**: Google launched the Android Developer Verification program in March 2026 to reduce malware by verifying developer identities and introducing protective waiting periods for sideloaded apps. F-Droid is a free and open-source (FOSS) app repository that hosts only libre software, operating independently of Google Play. The program's waiting periods and biometric checks are seen by F-Droid as a form of gatekeeping that restricts user choice and threatens the viability of alternative app stores.
+**Background**: LUKS (Linux Unified Key Setup) is a disk encryption specification that stores master keys in kernel memory to perform real-time encryption and decryption. When a system suspends to RAM, these keys normally remain in memory, but the `luksSuspend` command is designed to wipe them before sleep to enhance security. The kernel 6.9 change inadvertently disabled this wiping mechanism.
 
 <details><summary>References</summary>
 <ul>
-<li><a href="https://developer.android.com/developer-verification">Android developer verification | Android Developers</a></li>
-<li><a href="https://android-developers.googleblog.com/2026/03/android-developer-verification.html">Android Developers Blog: Android developer verification: Balancing openness and choice with safety</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Linux_Unified_Key_Setup">Linux Unified Key Setup - Wikipedia</a></li>
+<li><a href="https://www.howtogeek.com/what-is-luks-and-how-does-it-secure-your-linux-file-system/">What is LUKS , and How Does It Secure Your Linux File System?</a></li>
+<li><a href="https://www.golinuxcloud.com/how-to-encrypt-hard-disk-partition-luks-linux/">How to Encrypt New Hard Disk (Partition) using LUKS in Linux</a></li>
+
+</ul>
+</details>
+
+**Discussion**: Community comments note that the bug is easy to miss because security failures are often silent. Some argue that regular sleep (not using `luksSuspend`) already leaves keys in memory, so the extra protection was limited. Others emphasize the value of automated testing, such as NixOS tests, to catch such regressions.
+
+**Tags**: `#Linux kernel`, `#LUKS`, `#disk encryption`, `#security regression`, `#key management`
+
+---
+
+<a id="item-2"></a>
+## [Podman v6.0.0 Released with Major Improvements](https://blog.podman.io/2026/07/introducing-podman-v6-0-0/) ⭐️ 8.0/10
+
+Podman 6.0.0 has been released, introducing new network improvements and enhanced Quadlet support for easier container management. This release strengthens Podman as a leading Docker alternative, offering daemonless, rootless execution and seamless docker-compose compatibility, benefiting DevOps workflows and container adoption. Notable technical details include a revamped network stack and improved Quadlet integration with systemd, alongside performance optimizations and bug fixes as highlighted in community discussions.
+
+hackernews · soheilpro · Jul 2, 14:23 · [Discussion](https://news.ycombinator.com/item?id=48762098)
+
+**Background**: Podman is an open-source, daemonless container engine from Red Hat that complies with OCI standards. Unlike Docker, it runs containers without a central daemon and supports rootless operations for enhanced security. Its CLI is designed to be Docker-compatible, easing migration for users.
+
+<details><summary>References</summary>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Podman">Podman - Wikipedia</a></li>
+<li><a href="https://www.redhat.com/en/topics/containers/what-is-podman">What is Podman?</a></li>
+<li><a href="https://docs.podman.io/">What is Podman? — Podman documentation</a></li>
+
+</ul>
+</details>
+
+**Discussion**: Community sentiment is overwhelmingly positive, with users praising easy migration from Docker, new network features, and Quadlet. One user noted memory efficiency and daemonless design, while another commented on low text contrast on the blog. Overall, the release is enthusiastically received.
+
+**Tags**: `#podman`, `#containers`, `#docker alternative`, `#devops`, `#version release`
+
+---
+
+<a id="item-3"></a>
+## [F-Droid Calls Android Developer Verification a Malware Threat](https://f-droid.org/2026/07/01/adv-malware.html) ⭐️ 8.0/10
+
+F-Droid published a blog post arguing that Android's Developer Verification is a threat masquerading as protection, comparing it to malware like trojans. This article challenges Google's control over Android app distribution and raises concerns about user autonomy and security, potentially influencing the debate on open mobile ecosystems. The article uses strong language, accusing Google of acting like a 'malware vendor' and drawing parallels between Developer Verification and trojan behavior. It also references the Keep Android Open campaign.
+
+hackernews · drewfax · Jul 2, 03:00 · [Discussion](https://news.ycombinator.com/item?id=48755965)
+
+**Background**: F-Droid is a free and open-source app store for Android that only hosts FOSS apps. Android Developer Verification requires developers to verify their identity and submit apps for review, which F-Droid argues restricts user freedom and undermines the open-source ecosystem.
+
+<details><summary>References</summary>
+<ul>
 <li><a href="https://en.wikipedia.org/wiki/F-Droid">F-Droid</a></li>
 
 </ul>
 </details>
 
-**Discussion**: Community comments on the article are divided: some users strongly support F-Droid's stance and emphasize the importance of installing whatever software they want on their own devices, while others criticize the article's tone as 'childish' and unprofessional, suggesting it gives Google ammunition to dismiss F-Droid. Several commenters also suggest migrating to alternative mobile OSes like GrapheneOS, Sailfish OS, or Ubuntu Touch to escape Google's control.
+**Discussion**: Community comments are mixed: some users agree and advocate switching to alternative OSes like GrapheneOS or SailfishOS, while others criticize the article's tone as childish and counterproductive, suggesting the Keep Android Open site is a better resource.
 
-**Tags**: `#Android`, `#Google Play`, `#F-Droid`, `#open source`, `#app verification`
-
----
-
-<a id="item-2"></a>
-## [Japan's top court rules AI cannot be listed as inventor](https://japannews.yomiuri.co.jp/science-nature/technology/20260306-314930/) ⭐️ 8.0/10
-
-Japan's Supreme Court has ruled that artificial intelligence cannot be named as an inventor on patent applications, affirming that only natural persons can be recognized as inventors under current patent law. This decision sets a clear legal precedent in Japan, one of the world's largest patent markets, and reinforces the principle that AI lacks legal personality and accountability, which could influence similar rulings in other jurisdictions. The ruling stems from a case where an applicant attempted to list an AI system called 'DABUS' as the inventor. The court emphasized that patent law requires an inventor to be a 'natural person' with legal capacity, which AI does not possess.
-
-hackernews · mushstory · Jul 2, 13:43 · [Discussion](https://news.ycombinator.com/item?id=48761536)
-
-**Background**: Patent law globally traditionally grants inventorship rights only to natural persons, as inventors must be capable of assigning rights and assuming legal responsibility. AI systems, as machines or software, cannot hold property or be held accountable under current legal frameworks. This ruling aligns with similar decisions in the United States, the United Kingdom, and the European Patent Office, which have all rejected AI as inventors.
-
-**Discussion**: Commenters largely welcomed the ruling, arguing that AI lacks accountability and therefore should not own benefits. Some raised broader concerns about patent system efficacy, while others questioned whether AI-generated inventions are obvious. A few asked practical questions about refiling patents under human names.
-
-**Tags**: `#AI`, `#patents`, `#intellectual property`, `#Japan`, `#legal`
-
----
-
-<a id="item-3"></a>
-## [AI Proof Assistants Challenge Traditional Theorem Economy](https://davidbessis.substack.com/p/the-fall-of-the-theorem-economy) ⭐️ 8.0/10
-
-An article by David Bessis argues that AI-powered proof assistants are shifting the focus of mathematics from theorem proving to insight and visualization, challenging the traditional 'theorem economy'. This shift could fundamentally change how mathematical research is conducted and valued, potentially reducing the emphasis on producing numerous theorems and increasing the value of intuitive understanding and visualization. The article draws parallels to software engineering, where testing and debugging often replace formal proofs, and references Greg Egan's novel 'Diaspora' for the concept of 'truth mining' as a future of mathematics.
-
-hackernews · varjag · Jul 2, 08:01 · [Discussion](https://news.ycombinator.com/item?id=48758048)
-
-**Background**: Proof assistants are interactive software tools that allow mathematicians to formalize mathematical statements and mechanically verify proofs. Recent advances integrate artificial intelligence to automate parts of the proof process, making formalization more accessible.
-
-<details><summary>References</summary>
-<ul>
-<li><a href="https://en.wikipedia.org/wiki/Proof_assistant">Proof assistant</a></li>
-<li><a href="https://leodemoura.github.io/blog/2026-2-18-proof-assistants-in-the-age-of-ai/">Proof Assistants in the Age of AI — Leonardo de Moura</a></li>
-
-</ul>
-</details>
-
-**Discussion**: Comments on the article show mixed reactions: some find the prediction prescient and cite Greg Egan, while others question whether mathematics should center on proof. Concerns are also raised about privatization of AI resources potentially harming open science.
-
-**Tags**: `#mathematics`, `#AI`, `#proof assistants`, `#research methodology`, `#open science`
+**Tags**: `#Android`, `#F-Droid`, `#mobile security`, `#open source`, `#Google`
 
 ---
 
 <a id="item-4"></a>
-## [ZCode Desktop App Harness for GLM-5.2 Released](https://zcode.z.ai/en) ⭐️ 8.0/10
+## [Japan top court: AI cannot be listed as inventor on patents](https://japannews.yomiuri.co.jp/science-nature/technology/20260306-314930/) ⭐️ 8.0/10
 
-Z.ai released ZCode, a desktop application that serves as the official harness for its GLM-5.2 model, designed for coding tasks with integrations for CLI agents. This release sparks debate about open-source versus closed-source AI tools, as GLM-5.2 is open-source but ZCode is not, potentially limiting accessibility and trust. ZCode offers a stable context desktop environment with native AI agent control, differentiating it from chat-based assistants like ChatGPT and traditional IDEs. However, pricing transparency is criticized, with base usage allowances undisclosed.
+Japan's Supreme Court ruled that artificial intelligence cannot be listed as an inventor on patent applications, upholding the requirement that inventors must be natural persons. This ruling sets a clear legal precedent that AI lacks legal personhood, thereby affecting the patentability of AI-generated inventions and influencing global debates on AI and intellectual property. The case involved a petition to list an AI system as the inventor on a patent application. The court emphasized that only humans can be legally recognized as inventors under current patent law.
 
-hackernews · chvid · Jul 1, 22:03 · [Discussion](https://news.ycombinator.com/item?id=48753715)
+hackernews · mushstory · Jul 2, 13:43 · [Discussion](https://news.ycombinator.com/item?id=48761536)
 
-**Background**: GLM-5.2 is Z.ai's flagship open-source model for long-horizon tasks, excelling in coding benchmarks. ZCode is not the model itself but a desktop application that runs GLM-5.2 to perform coding work. The harness integrates with various CLI-based agents, offering an alternative to TUI-based coding agents like OpenCode.
+**Background**: Patent laws worldwide generally require inventors to be natural persons. As AI systems become capable of generating inventions independently, questions arise about whether AI can be considered an inventor. This ruling aligns with similar decisions in the US, UK, and Europe, reinforcing the human-centric nature of patent systems.
 
-<details><summary>References</summary>
-<ul>
-<li><a href="https://docs.z.ai/guides/llm/glm-5.2">GLM - 5 . 2 - Overview - Z. AI DEVELOPER DOCUMENT</a></li>
-<li><a href="https://zcode.z.ai/en">ZCode - Simple, Fast, Vibe‑Ready | Official Harness for GLM-5.2</a></li>
-<li><a href="https://www.verdent.ai/guides/agent/what-is-zcode-ai">What Is ZCode? A Developer Guide to Z.ai's Coding Agent - Verdent Guides</a></li>
+**Discussion**: Commenters expressed mixed views: some questioned the effectiveness of patents in promoting innovation, while others supported the ruling on accountability grounds. Concerns were raised about inventors simply listing themselves as the inventor of AI-generated work, potentially bypassing the ruling.
 
-</ul>
-</details>
-
-**Discussion**: The community expressed mixed reactions: some were surprised it's not open-source compared to alternatives like MiMo Code, while others questioned legal liability and data privacy when using a closed-source tool from a foreign jurisdiction. Pricing opacity was also criticized, with users noting undisclosed base usage limits.
-
-**Tags**: `#AI coding assistant`, `#GLM-5.2`, `#open source debate`, `#desktop app`, `#community discussion`
+**Tags**: `#AI`, `#patents`, `#law`, `#Japan`, `#intellectual property`
 
 ---
 
 <a id="item-5"></a>
-## [HNN via Differential Geometry and Noether's Theorem](https://www.reddit.com/r/MachineLearning/comments/1ukzdnj/hamiltonian_neural_networks_from_a_differential/) ⭐️ 8.0/10
+## [ECTC 2026 Highlights: EMIB-T, Custom HBM, and Cooling](https://newsletter.semianalysis.com/p/ectc2026) ⭐️ 8.0/10
 
-A blog post explores Hamiltonian Neural Networks (HNNs) from a differential geometry perspective, highlighting how Noether's theorem connects symmetries to conservation laws and generalization in machine learning. This perspective can deepen researchers' understanding of physics-informed neural networks and offer a principled way to build models that respect conservation laws, potentially improving generalization and sample efficiency. The author describes HNNs using geometric concepts and includes interactive visuals to ease comprehension, targeting an audience familiar with machine learning and physics. The post is mathematically dense but aims to make the underlying principles intuitive.
+At ECTC 2026, Intel showcased its EMIB-T packaging technology for HBM4 integration, while memory makers discussed custom HBM and packaging challenges. Novel microfluidic cooling and photonic interconnects were also highlighted. These advancements are critical for scaling AI accelerators, as they tackle power delivery, heat dissipation, and memory bandwidth limitations. The progress in packaging and interconnects will directly impact the performance and cost of next-generation AI hardware. Intel's EMIB-T supports HBM4 and future HBM5, scaling to a 120mm x 180mm package with over 38 bridges. HBM4 achieves pin speeds over 11 Gb/s, delivering >2.8 TB/s bandwidth. Microfluidic cooling etches channels directly into silicon for three times better heat removal.
+
+rss · Semianalysis · Jul 2, 17:25
+
+**Background**: EMIB (Embedded Multi-die Interconnect Bridge) is Intel's technology for connecting multiple dies using a small silicon bridge embedded in the substrate, enabling high-density interconnects. EMIB-T enhances it with TSVs for vertical power delivery, supporting higher-power chips like AI accelerators. HBM (High Bandwidth Memory) stacks DRAM dies vertically with a wide interface, essential for GPU and AI workloads. Microfluidic cooling integrates liquid cooling channels directly into the silicon for efficient heat removal, while photonic interconnects use light to replace electrical traces for higher bandwidth and lower power.
+
+<details><summary>References</summary>
+<ul>
+<li><a href="https://www.tomshardware.com/tech-industry/semiconductors/intels-emib-t-heads-for-fab-rollout-this-year">Intel's EMIB-T packaging technology set for fab rollout this year — as TSMC CoWoS capacity remains limited, EMIB-T is preparing for advanced AI accelerator designs | Tom's Hardware</a></li>
+<li><a href="https://en.wikipedia.org/wiki/High_Bandwidth_Memory">High Bandwidth Memory - Wikipedia</a></li>
+<li><a href="https://news.microsoft.com/source/features/innovation/microfluidics-liquid-cooling-ai-chips/">AI chips are getting hotter. A microfluidics breakthrough goes straight to the silicon to cool up to three times better. - Source</a></li>
+
+</ul>
+</details>
+
+**Tags**: `#semiconductor packaging`, `#HBM`, `#photonics`, `#chiplet`, `#cooling`
+
+---
+
+<a id="item-6"></a>
+## [Hamiltonian Neural Networks through a Differential Geometry Lens](https://www.reddit.com/r/MachineLearning/comments/1ukzdnj/hamiltonian_neural_networks_from_a_differential/) ⭐️ 8.0/10
+
+A blog post presents Hamiltonian Neural Networks (HNNs) from a differential geometry perspective, highlighting Noether's theorem and the relationship between symmetries and conservation laws. This perspective offers a deeper understanding of why HNNs work, linking physical principles to machine learning generalization, which could inspire more robust physics-informed models. The author includes interactive visuals and emphasizes Noether's theorem, which states that every continuous symmetry corresponds to a conservation law, a concept often underexplored in physics-informed ML.
 
 reddit · r/MachineLearning · /u/FlameOfIgnis · Jul 1, 21:55
 
-**Background**: Hamiltonian Neural Networks are a class of physics-informed models that learn to conserve a Hamiltonian (a scalar function representing total energy) from data, inspired by Hamiltonian mechanics. Noether's theorem, a cornerstone of theoretical physics, states that every continuous symmetry of a system corresponds to a conservation law. Applying this theorem to neural networks provides a theoretical link between symmetry in data and generalization capability.
+**Background**: Hamiltonian Neural Networks are a class of neural networks that learn Hamiltonian dynamics, conserving energy and respecting physical invariants. They are inspired by Hamiltonian mechanics, which describes systems in terms of position and momentum. Noether's theorem connects symmetries to conserved quantities, offering a theoretical foundation for generalization in ML.
 
 <details><summary>References</summary>
 <ul>
 <li><a href="https://arxiv.org/abs/1906.01563">[1906.01563] Hamiltonian Neural Networks</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Noether's_theorem">Noether's theorem</a></li>
 <li><a href="https://greydanus.github.io/2019/05/15/hamiltonian-nns/">Hamiltonian Neural Networks</a></li>
 
 </ul>
 </details>
 
-**Tags**: `#Hamiltonian Neural Networks`, `#Differential Geometry`, `#Physics-Informed Machine Learning`, `#Noether's Theorem`, `#Symmetries in ML`
-
----
-
-<a id="item-6"></a>
-## [Cloudflare to block mixed-purpose AI crawlers starting September](https://techcrunch.com/2026/07/01/cloudflares-new-policy-pushes-ai-companies-to-pay-for-publishers-content/) ⭐️ 8.0/10
-
-Cloudflare announced that starting September 15, it will default to blocking mixed-purpose crawlers that simultaneously serve search indexing, AI answer generation, and AI training, especially on ad-supported pages. The company explicitly criticized Google for exploiting a loophole where publishers cannot easily allow search indexing while preventing AI training. This policy shift directly addresses a growing tension between web content publishers and AI companies, forcing AI firms to negotiate content licensing and potentially pay for actual usage rather than just scraping. It could reshape how AI training data is sourced and set a precedent for other CDNs and hosting providers. The block applies to crawlers that combine search, AI answer, and training purposes, but only on ad-supported pages; other pages may remain unaffected. Google's Googlebot is specifically caught because it indexes for search and also supplies data for AI training, making it hard for publishers to selectively allow only search.
-
-telegram · zaihuapd · Jul 2, 05:37
-
-**Background**: Websites traditionally use robots.txt to communicate crawl permissions to bots, but robots.txt is a voluntary protocol and offers no technical enforcement. AI companies have been scraping web content for training large language models, often using the same crawlers as search engines, creating a dilemma for publishers who want search traffic but not unauthorized AI use.
-
-<details><summary>References</summary>
-<ul>
-<li><a href="https://www.theregister.com/ai-and-ml/2026/07/01/cloudflare-to-block-cynical-search-and-scrape-bots-from-ad-supported-web-pages/5264727">Cloudflare to block cynical search -and-scrape bots from ad-supported...</a></li>
-<li><a href="https://dataimpulse.com/blog/robots-txt-ai-crawlers/">Robots.txt & AI Crawlers in 2026: The Full Guide</a></li>
-
-</ul>
-</details>
-
-**Discussion**: A comment on the Telegram channel noted that many websites block AI crawlers but not Google, allowing Google to exploit this loophole to train its AI. This reflects a common frustration among publishers who feel forced to accept Google's data collection for fear of losing search rankings.
-
-**Tags**: `#Cloudflare`, `#AI crawlers`, `#content licensing`, `#Google`, `#web scraping`
+**Tags**: `#Hamiltonian Neural Networks`, `#Differential Geometry`, `#Physics-Informed ML`, `#Noether's Theorem`, `#Machine Learning`
 
 ---
 
 <a id="item-7"></a>
-## [OpenAI Proposes US Government Take 5% Stake in AI Giants](https://www.bloomberg.com/news/articles/2026-07-02/openai-proposes-giving-the-us-government-a-5-stake-ft-says) ⭐️ 8.0/10
+## [Cloudflare to block mixed-purpose AI crawlers from September](https://techcrunch.com/2026/07/01/cloudflares-new-policy-pushes-ai-companies-to-pay-for-publishers-content/) ⭐️ 8.0/10
 
-OpenAI has proposed that the US government take a 5% stake in itself and other major AI companies such as Google and Meta, according to a Bloomberg report. The proposal aims to allow the public to directly share in the benefits of the AI boom. This proposal could reshape the governance of the AI industry and establish a precedent for public benefit sharing from technological advances. It also raises questions about government regulation, control, and potential conflicts of interest. The proposal is still under discussion, and it is unclear whether the other companies will accept. A government entity would uniformly hold 5% stakes in OpenAI, Anthropic, Google, and Meta.
+Starting September 15, Cloudflare will automatically block mixed-purpose crawlers (including Google's) that simultaneously use scraped content for search indexing and AI training or serving, effectively forcing AI companies to pay for publisher content. This policy shift addresses a long-standing loophole where publishers block AI crawlers but allow Googlebot, enabling Google to use scraped content for AI without compensation. It could set a precedent for the web scraping ecosystem and data compensation models for AI training. Cloudflare specifically called out Google for exploiting this loophole—servers cannot easily distinguish between search indexing and AI training when the same user agent (Googlebot) is used. The policy only applies to pages with ads, and Cloudflare plans future pricing for actual usage rather than just crawling.
 
-telegram · zaihuapd · Jul 2, 06:02
+telegram · zaihuapd · Jul 2, 05:37
 
-**Background**: OpenAI is a prominent AI research and deployment company known for creating ChatGPT and GPT-4. The company has been at the forefront of the AI boom, which has raised concerns about profit distribution and public benefit. Government ownership stakes in private companies are rare in the US but could be a mechanism to ensure that the public gains from technological advancements.
+**Background**: Web crawlers are bots that systematically browse websites, typically used by search engines for indexing. A mixed-purpose crawler refers to one that performs multiple functions like searching, AI query answering, and model training concurrently. Publishers have long struggled to block AI crawlers without blocking search engine bots, and Cloudflare's move provides a technical solution.
 
-**Tags**: `#OpenAI`, `#AI Policy`, `#Government Regulation`, `#Tech Giants`
+<details><summary>References</summary>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Web_crawler">Web crawler - Wikipedia</a></li>
+<li><a href="https://www.cloudflare.com/learning/bots/what-is-a-web-crawler/">What Is a Web Crawler ? | How Web Spiders Work</a></li>
+
+</ul>
+</details>
+
+**Tags**: `#Cloudflare`, `#AI Crawlers`, `#Google`, `#Web Scraping`, `#Content Policy`
 
 ---
 
 <a id="item-8"></a>
-## [CSRC Approves Unitree Technology's IPO on STAR Market](https://www.csrc.gov.cn/csrc/c105906/c7642867/content.shtml) ⭐️ 8.0/10
+## [OpenAI Proposes US Government 5% Stake, Eyes Other AI Giants](https://www.bloomberg.com/news/articles/2026-07-02/openai-proposes-giving-the-us-government-a-5-stake-ft-says) ⭐️ 8.0/10
 
-China's securities regulator, the CSRC, approved the IPO registration of Unitree Technology on the STAR Market on July 1, 2026, allowing the company to proceed with its initial public offering. This approval signals strong market confidence in the robotics sector, providing Unitree with capital to accelerate R&D and commercialization of its quadruped and humanoid robots, potentially boosting China's presence in global robotics. Unitree must conduct the issuance strictly according to the prospectus and underwriting plan submitted to the Shanghai Stock Exchange, and must promptly report any material events between registration and issuance completion.
+OpenAI has proposed that the US government hold a 5% stake in the company, and is also considering a broader vehicle that would include stakes in other major AI firms such as Google and Meta, according to a Bloomberg report. This proposal could reshape AI governance by linking public benefit to corporate profits, potentially setting a precedent for government participation in technology companies and influencing the distribution of AI-driven economic gains. The plan is reportedly being discussed internally by OpenAI CEO Sam Altman and other executives, but it remains unclear whether other companies like Google and Meta would accept such an arrangement, which could raise concerns over regulatory control and conflicts of interest.
 
-telegram · zaihuapd · Jul 2, 09:57
+telegram · zaihuapd · Jul 2, 06:02
 
-**Background**: Unitree Robotics, founded in 2016, is a leading Chinese robotics company known for its high-performance quadrupedal robots like the Go1 and B2, as well as humanoid robots. The STAR Market (SSE STAR Market) is a Shanghai Stock Exchange board launched in 2019 to support technology and innovation-driven enterprises with easier listing rules.
+**Background**: OpenAI is a leading AI research organization that developed GPT models and ChatGPT. The proposal comes amid growing debate over how the benefits of AI should be shared, with some advocating for public ownership or redistribution mechanisms. Government stakes in private companies are rare in the US tech sector but exist in strategic industries.
 
-<details><summary>References</summary>
-<ul>
-<li><a href="https://en.wikipedia.org/wiki/Unitree_Robotics">Unitree Robotics - Wikipedia</a></li>
-<li><a href="https://www.unitree.com/">Unitree Robotics | Robot Dog_Quadruped_Humanoid Robotics Company</a></li>
-
-</ul>
-</details>
-
-**Tags**: `#IPO`, `#robotics`, `#China`, `#STAR Market`, `#regulation`
+**Tags**: `#OpenAI`, `#AI政策`, `#美国政府`, `#公司治理`, `#AI产业`
 
 ---
 
 <a id="item-9"></a>
-## [Companies restrict AI use as costs soar: Citibank bans GPT-5.5](https://www.404media.co/companies-are-throttling-employees-ai-use-because-its-too-expensive/) ⭐️ 8.0/10
+## [Citibank blocks GPT-5.5 as AI costs surge, firms limit usage](https://www.404media.co/companies-are-throttling-employees-ai-use-because-its-too-expensive/) ⭐️ 8.0/10
 
-Citibank has fully banned GPT-5.5 and Claude Opus 4.6/4.7 as of June 24, 2026 due to high AI credit consumption. Atlassian's AI spending surged from $5 million to over $15 million monthly, prompting usage caps and cost dashboards. This trend reveals that the per-token pricing model of advanced AI is proving unsustainable for enterprise budgets, potentially slowing AI adoption and shifting focus to cost optimization. It signals a maturation point where the economics of AI must be addressed for widespread deployment. Atlassian's internal dashboard shows AI costs rising from $5M (Aug 2025) to over $15M (May 2026). Adobe chose not to renew its unlimited Claude contract, expiring June 30. Amazon removed an internal AI leaderboard and employees discovered previously unknown token caps.
+Citibank disabled access to GPT-5.5, Claude Opus 4.6, and 4.7 on June 24, 2026, citing excessive AI credit consumption. Atlassian's AI spending tripled to over $15 million monthly by May 2026, and Adobe declined to renew its unlimited Claude contract. This trend highlights the real-world cost challenges of adopting frontier AI models in enterprises, potentially slowing internal AI adoption and forcing businesses to develop stricter usage policies or seek more cost-effective alternatives. Atlassian's internal dashboard showed AI spending rising from $5 million in August 2025 to over $15 million in May 2026, leading to the end of unlimited usage and introduction of cost-tracking panels. Amazon had previously shut down an internal ranking that encouraged AI use, and employees later discovered previously unknown token usage caps.
 
 telegram · zaihuapd · Jul 2, 13:59
 
-**Background**: GPT-5.5 is OpenAI's frontier model released in April 2026, designed for complex professional workloads with improved reasoning and token efficiency. Claude Opus 4.6 and 4.7 are Anthropic's most powerful models for coding and multi-step tasks. Enterprise AI platforms often charge per token, and costs can explode as employees use expensive models without limits.
+**Background**: Enterprise AI tools like GPT-5.5 and Claude Opus operate on token-based pricing, where each query consumes a certain number of tokens. Companies often provide employees with a pool of AI credits; expensive frontier models can quickly deplete these credits, leading to unexpected cost overruns. GPT-5.5 is OpenAI's frontier model released in April 2026, known for strong reasoning capabilities but higher per-token cost.
 
 <details><summary>References</summary>
 <ul>
 <li><a href="https://en.wikipedia.org/wiki/GPT-5.5">GPT-5.5</a></li>
-<li><a href="https://platform.claude.com/docs/en/about-claude/models/overview">Models overview - Claude Platform Docs</a></li>
+<li><a href="https://openrouter.ai/openai/gpt-5.5">GPT - 5 . 5 - API Pricing & Benchmarks | OpenRouter</a></li>
+<li><a href="https://www.afternoon.co/blog/token-based-pricing-guide">Token-Based Pricing: How to Account for AI Credits and LLM Usage | Afternoon Blog</a></li>
 
 </ul>
 </details>
 
-**Tags**: `#AI`, `#enterprise`, `#cost`, `#restrictions`, `#industry trend`
+**Tags**: `#AI`, `#enterprise`, `#cost`, `#productivity`, `#news`
+
+---
+
+<a id="item-10"></a>
+## [Anthropic in talks with Samsung for custom AI chips](https://www.theinformation.com/articles/anthropic-talks-samsung-manufacture-custom-ai-chip) ⭐️ 8.0/10
+
+Anthropic has begun developing its own custom AI chips and is in early-stage talks with Samsung Electronics for potential manufacturing. This move aims to increase control over the computing infrastructure for its Claude model. This signals vertical integration in AI hardware by a leading AI company, following similar moves by OpenAI and others. It could reduce reliance on third-party chip suppliers and potentially optimize performance for Anthropic's specific workloads. The project is still in very early stages, and Anthropic is entering later than some competitors who have already advanced their own server chip efforts. Samsung Foundry offers advanced process technologies including 3nm GAA (Gate-All-Around) transistors.
+
+telegram · zaihuapd · Jul 2, 15:57
+
+**Background**: Custom AI chips are specialized semiconductors designed to accelerate machine learning workloads more efficiently than general-purpose chips like GPUs. Samsung Foundry is one of the world's largest semiconductor contract manufacturers, offering fabrication services for companies designing their own chips. Anthropic is the developer of the Claude family of large language models, which are trained using constitutional AI techniques.
+
+<details><summary>References</summary>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Samsung_Foundry">Samsung Foundry</a></li>
+<li><a href="https://semiconductor.samsung.com/foundry/">Foundry Overview | Samsung Semiconductor Global</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Claude_(language_model)">Claude (language model)</a></li>
+
+</ul>
+</details>
+
+**Tags**: `#AI chips`, `#Anthropic`, `#Samsung`, `#custom silicon`, `#AI hardware`
 
 ---
