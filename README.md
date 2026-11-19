@@ -332,6 +332,21 @@ The generated report will be saved to `data/summaries/`.
 
 Horizon works great as a **GitHub Actions** cron job. See [`.github/workflows/daily-summary.yml`](.github/workflows/daily-summary.yml) for a ready-to-use workflow that generates and deploys your daily briefing to GitHub Pages automatically.
 
+The AI endpoint is configured entirely from repository settings — no code
+change is needed to switch protocol or provider. Under
+`Settings → Secrets and variables → Actions`:
+
+| Kind | Name | Purpose |
+| --- | --- | --- |
+| Variable | `HORIZON_AI_PROVIDER` | `openai`, `anthropic`, `deepseek`, `ollama`, ... |
+| Variable | `HORIZON_AI_BASE_URL` | Any compatible URL. OpenAI protocol needs `/v1`; Anthropic protocol must omit it |
+| Variable | `HORIZON_AI_MODEL` | Model name understood by that endpoint |
+| Secret | `HORIZON_AI_KEY` | API key for that endpoint (empty for Ollama) |
+
+These values are injected through `${VAR}` placeholders in
+`data/config.github.json`. The workflow validates them first and fails with
+an explicit message when one is missing.
+
 ## Supported Sources
 
 | Source | What it fetches | Comments |

@@ -329,6 +329,17 @@ docker compose run --rm horizon --hours 48  # 過去48時間から取得
 
 Horizonは**GitHub Actions**のcronジョブとして最適に動作します。日次ブリーフィングを生成しGitHub Pagesへ自動デプロイする、すぐに使えるワークフローについては[`.github/workflows/daily-summary.yml`](.github/workflows/daily-summary.yml)を参照してください。
 
+AIエンドポイントはリポジトリの設定だけで完結し、プロトコルやプロバイダを切り替えるのにコード変更は不要です。`Settings → Secrets and variables → Actions` で以下を設定します。
+
+| 種類 | 名前 | 用途 |
+| --- | --- | --- |
+| Variable | `HORIZON_AI_PROVIDER` | `openai`、`anthropic`、`deepseek`、`ollama` など |
+| Variable | `HORIZON_AI_BASE_URL` | 任意の互換URL。OpenAIプロトコルは `/v1` が必要、Anthropicプロトコルは `/v1` を付けない |
+| Variable | `HORIZON_AI_MODEL` | そのエンドポイントが解釈できるモデル名 |
+| Secret | `HORIZON_AI_KEY` | そのエンドポイントのAPIキー（Ollamaでは空） |
+
+これらの値は `data/config.github.json` の `${VAR}` プレースホルダー経由で注入されます。ワークフローは実行前に値を検証し、不足している場合は明示的なメッセージで失敗します。
+
 ## サポートされている情報源
 
 | 情報源 | 取得する内容 | コメント |

@@ -321,6 +321,18 @@ docker compose run --rm horizon --hours 48   # 抓取最近 48 小时的内容
 
 Horizon 非常适合作为 **GitHub Actions** 定时任务运行。查看 [`.github/workflows/daily-summary.yml`](.github/workflows/daily-summary.yml) 获取现成的工作流配置，可自动生成日报并部署到 GitHub Pages。
 
+AI 端点的协议、地址、模型和密钥都可以直接在仓库里配置，无需修改代码。在
+`Settings → Secrets and variables → Actions` 中设置：
+
+| 类型 | 名称 | 说明 |
+| --- | --- | --- |
+| Variable | `HORIZON_AI_PROVIDER` | 协议：`openai`、`anthropic`、`deepseek`、`ollama` 等 |
+| Variable | `HORIZON_AI_BASE_URL` | 任意兼容地址。OpenAI 协议需带 `/v1`；Anthropic 协议不要带 `/v1` |
+| Variable | `HORIZON_AI_MODEL` | 该端点支持的模型名 |
+| Secret | `HORIZON_AI_KEY` | 该端点对应的 API Key（Ollama 可留空） |
+
+这些值通过 `data/config.github.json` 里的 `${VAR}` 占位符注入。工作流会先校验四个变量是否齐全，缺失时直接失败并提示，不会带着错误配置跑一次空任务。
+
 ## 支持的信息源
 
 | 信息源 | 抓取内容 | 评论收集 |

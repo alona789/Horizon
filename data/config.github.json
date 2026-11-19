@@ -1,10 +1,10 @@
 {
   "version": "1.0",
   "ai": {
-    "provider": "deepseek",
-    "model": "deepseek-v4-flash",
-    "base_url": "https://api.deepseek.com",
-    "api_key_env": "DEEPSEEK_API_KEY",
+    "provider": "${HORIZON_AI_PROVIDER}",
+    "model": "${HORIZON_AI_MODEL}",
+    "base_url": "${HORIZON_AI_BASE_URL}",
+    "api_key_env": "HORIZON_AI_KEY",
     "temperature": 0.3,
     "max_tokens": 8192,
     "throttle_sec": 1,

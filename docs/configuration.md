@@ -207,19 +207,68 @@ By default, AI scoring and enrichment run one item at a time. If your API endpoi
 - Result ordering is preserved regardless of concurrency.
 - If you also use `throttle_sec`, each concurrent task sleeps independently after finishing an item.
 
-**Custom Base URL** (for proxies):
+**Custom Base URL** (for proxies and compatible endpoints):
+
+Horizon accepts any OpenAI- or Anthropic-compatible endpoint. The two SDKs
+join paths differently, so the trailing `/v1` rule depends on the protocol:
+
+| Protocol | `provider` values | `base_url` should end with |
+| --- | --- | --- |
+| OpenAI-compatible | `openai`, `ali`, `doubao`, `minimax`, `deepseek` | `/v1` |
+| Anthropic-compatible | `anthropic` (or `minimax` with a `/anthropic` URL) | nothing |
+
+OpenAI-compatible gateway:
+
+```json
+{
+  "ai": {
+    "provider": "openai",
+    "model": "your-model",
+    "api_key_env": "MY_GATEWAY_KEY",
+    "base_url": "https://your-gateway.com/v1"
+  }
+}
+```
+
+Anthropic-compatible gateway — do **not** append `/v1`, because the SDK
+already requests `/v1/messages`:
 
 ```json
 {
   "ai": {
     "provider": "anthropic",
-    "base_url": "https://your-proxy.com/v1",
-    ...
+    "model": "your-model",
+    "api_key_env": "MY_GATEWAY_KEY",
+    "base_url": "https://your-gateway.com/anthropic"
   }
 }
 ```
 
+Ollama is the only provider where Horizon appends `/v1` for you.
+
+Any string field also supports `${VAR_NAME}` substitution, so private
+endpoints and keys can stay out of `config.json` (see
+[Environment Variable Substitution](#environment-variable-substitution)).
+
 For OpenAI-compatible gateways, Horizon sends `temperature` by default. If a newer reasoning-style model rejects that parameter with an error such as `temperature is deprecated for this model`, Horizon retries once without it and remembers that capability for later requests.
+
+### Running on GitHub Actions
+
+`data/config.github.json` is copied to `data/config.json` at the start of each
+workflow run, and it uses `${VAR}` placeholders for the AI endpoint. The
+protocol, URL, model, and key therefore all live in repository settings:
+
+`Settings → Secrets and variables → Actions`
+
+| Kind | Name | Purpose |
+| --- | --- | --- |
+| Variable | `HORIZON_AI_PROVIDER` | `openai`, `anthropic`, `deepseek`, `ollama`, ... |
+| Variable | `HORIZON_AI_BASE_URL` | Any compatible URL (apply the `/v1` rule above) |
+| Variable | `HORIZON_AI_MODEL` | Model name understood by that endpoint |
+| Secret | `HORIZON_AI_KEY` | API key for that endpoint (empty for Ollama) |
+
+The workflow validates these before running and fails with a clear message
+when one is missing, rather than sending a literal `${VAR}` as a URL.
 
 ## Information Sources
 
