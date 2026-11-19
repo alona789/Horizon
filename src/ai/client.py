@@ -86,6 +86,33 @@ def _normalize_ollama_base_url(base_url: str) -> str:
     return f"{normalized}/v1"
 
 
+_UNEXPANDED_ENV_RE = re.compile(r"\$\{[A-Za-z_][A-Za-z0-9_]*\}")
+
+
+def _validate_base_url(base_url: str, config: AIConfig) -> str:
+    """Reject base URLs that would fail opaquely at request time.
+
+    ``StorageManager._expand_env_vars`` leaves unset ``${VAR}`` references
+    in place, and neither pydantic nor the OpenAI/Anthropic SDKs reject
+    them. Without this check the SDK treats the placeholder as a hostname
+    and every request fails with a generic ``APIConnectionError``, which
+    is hard to trace back to a missing environment variable.
+    """
+    missing = _UNEXPANDED_ENV_RE.findall(base_url)
+    if missing:
+        raise ValueError(
+            f"Unresolved environment variable in ai.base_url: {', '.join(missing)}. "
+            "Set these variables in .env / your shell, or remove base_url from "
+            "data/config.json to use the provider default."
+        )
+    if "://" not in base_url:
+        raise ValueError(
+            f"Invalid ai.base_url {base_url!r} for provider "
+            f"'{config.provider.value}': missing 'http://' or 'https://' scheme."
+        )
+    return base_url
+
+
 class AIClient(ABC):
     """Abstract base class for AI clients."""
 
@@ -126,7 +153,9 @@ class AnthropicClient(AIClient):
 
         kwargs = {"api_key": api_key}
         if config.base_url:
-            kwargs["base_url"] = config.base_url
+            kwargs["base_url"] = _validate_base_url(
+                config.base_url.strip(), config
+            )
 
         self.client = AsyncAnthropic(**kwargs)
         self.model = config.model
@@ -234,7 +263,9 @@ class OpenAIClient(AIClient):
 
         if config.provider == AIProvider.OLLAMA and base_url:
             return _normalize_ollama_base_url(base_url)
-        return base_url or None
+        if base_url:
+            return _validate_base_url(base_url, config)
+        return None
 
     async def complete(
         self,
@@ -369,6 +400,7 @@ class AzureOpenAIClient(AIClient):
         azure_endpoint = os.getenv(config.azure_endpoint_env)
         if not azure_endpoint:
             raise ValueError(f"Missing Azure endpoint: {config.azure_endpoint_env}")
+        azure_endpoint = _validate_base_url(azure_endpoint.strip(), config)
         if not config.api_version:
             raise ValueError("api_version is required for azure provider")
 

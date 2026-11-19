@@ -140,6 +140,38 @@ class TestOpenAIClientInit:
 
         assert str(client.client.base_url).rstrip("/") == "http://nas.local:11434/v1"
 
+    def test_unexpanded_base_url_placeholder_is_rejected(self, monkeypatch):
+        """An unset ${VAR} must fail loudly instead of becoming a fake host.
+
+        StorageManager leaves unresolved ${VAR} references in place, and the
+        SDK would URL-encode the braces and report an opaque
+        APIConnectionError on every request.
+        """
+        monkeypatch.setenv("MINIMAX_API_KEY", "test-key")
+
+        with pytest.raises(ValueError, match="Unresolved environment variable"):
+            OpenAIClient(_make_config(base_url="${HORIZON_AI_BASE_URL}"))
+
+    def test_base_url_without_scheme_is_rejected(self, monkeypatch):
+        monkeypatch.setenv("MINIMAX_API_KEY", "test-key")
+
+        with pytest.raises(ValueError, match="missing 'http://' or 'https://'"):
+            OpenAIClient(_make_config(base_url="gateway.example/v1"))
+
+    def test_unexpanded_base_url_placeholder_is_rejected_for_anthropic(
+        self, monkeypatch
+    ):
+        monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
+        config = _make_config(
+            provider=AIProvider.ANTHROPIC,
+            model="claude-3-5-sonnet-20241022",
+            api_key_env="ANTHROPIC_API_KEY",
+            base_url="${HORIZON_AI_BASE_URL}",
+        )
+
+        with pytest.raises(ValueError, match="Unresolved environment variable"):
+            AnthropicClient(config)
+
 
 class TestOpenAIClientComplete:
     def test_basic_completion(self, monkeypatch):
